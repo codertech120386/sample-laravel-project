@@ -1,0 +1,12 @@
+type User {
+    id: ID!
+    email: String!
+    name: String!
+    phone: String!
+    reset_code: String
+    token: String
+    email_verified_at: String
+    dob: String
+    gender: String
+    profile_image_url: String
+}

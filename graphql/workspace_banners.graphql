@@ -1,0 +1,8 @@
+type WorkspaceBanner {
+    id: ID!
+    title: String!
+    sub_title: String!
+    workspace: Workspace! @belongsTo
+    created_at: String!
+    updated_at: String!
+}

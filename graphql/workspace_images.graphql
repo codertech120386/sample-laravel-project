@@ -1,0 +1,7 @@
+type WorkspaceImage {
+    id: ID!
+    image_url: String!
+    workspace: Workspace! @belongsTo
+    created_at: String!
+    updated_at: String!
+}

@@ -1,0 +1,11 @@
+type Payment {
+    id: Int!
+    number_of_seats: Int!
+    amount: Int!
+    gst: Int!
+    user: User!
+    plan: WorkspacePlan!
+    subscription: WorkspaceSubscription!
+    created_at: String!
+    updated_at: String!
+}

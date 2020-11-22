@@ -1,0 +1,10 @@
+type Amenity {
+    id: ID!
+    name: String!
+    icon_url: String!
+    icon_name: String!
+    icon_provider: String!
+    workspacess: [Workspace!]! @belongsToMany
+    created_at: String!
+    updated_at: String!
+}

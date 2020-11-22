@@ -1,0 +1,5 @@
+type Message {
+    message: String!
+    success: Boolean
+    error: Boolean
+}

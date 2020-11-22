@@ -1,0 +1,4 @@
+type FaqData {
+    recommended_faqs: [Faq!]!
+    normal_faqs: [Faq!]!
+}

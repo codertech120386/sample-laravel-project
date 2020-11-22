@@ -1,0 +1,11 @@
+type CouponCode {
+    id: ID!
+    code: String!
+    description: String!
+    discount_amount: Int!
+    quantity: Int
+    image: String!
+    expires_at: String
+    created_at: String
+    updated_at: String
+}

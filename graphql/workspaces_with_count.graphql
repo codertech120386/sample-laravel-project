@@ -1,0 +1,18 @@
+input FilterUserInput {
+    propertyType: String
+    spaceType: String
+    amenities: String
+    duration: String
+    price: String
+    seatCapacity: String
+    latLong: String
+}
+
+type WorkspacesWithCount {
+    count: Int!
+    type: WorkspaceType!
+    total_pages: Int!
+    current_page: Int!
+    type: WorkspaceType!
+    workspaces: [Workspace!]!
+}

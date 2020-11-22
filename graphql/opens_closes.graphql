@@ -1,0 +1,4 @@
+type OpensCloses {
+    opens_at: String
+    closes_at: String
+}

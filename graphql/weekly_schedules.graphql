@@ -1,0 +1,9 @@
+type WeeklySchedule {
+    id: ID!
+    workspace_id: Workspace! @belongsTo
+    day: String!
+    opens_at: String
+    closes_at: String
+    created_at: String!
+    updated_at: String!
+}

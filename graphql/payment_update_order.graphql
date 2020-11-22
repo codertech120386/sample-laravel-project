@@ -1,0 +1,6 @@
+type PaymentUpdateOrder {
+    status: String!
+    workspace: Workspace!
+    plan: WorkspacePlan!
+    subscription_id: Int
+}

@@ -1,0 +1,12 @@
+type WorkspacePlan {
+    id: ID!
+    workspace: Workspace! @belongsTo
+    space_type: String!
+    title: String!
+    sub_title: String!
+    duration: Int!
+    cost: Int!
+    location_type: String
+    created_at: String!
+    updated_at: String!
+}

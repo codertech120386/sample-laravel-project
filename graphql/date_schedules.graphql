@@ -1,0 +1,7 @@
+type DateSchedule {
+    id: ID!
+    workspace_id: Workspace! @belongsTo
+    date: String
+    opens_at: String
+    closes_at: String
+}

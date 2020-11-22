@@ -1,0 +1,5 @@
+type RecentlySearchedWorkspaces {
+    id: ID!
+    workspace: Workspace!
+    updated_at: String
+}

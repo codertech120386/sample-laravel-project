@@ -1,0 +1,6 @@
+type PaymentCreateOrder {
+    order_id: String!
+    amount: Int!
+    user: User!
+    subscription_id: Int
+}

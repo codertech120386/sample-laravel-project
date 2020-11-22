@@ -1,0 +1,8 @@
+type Checkin {
+    id: ID!
+    user: User!
+    workspace: Workspace!
+    checked_in_date: String!
+    created_at: String!
+    updated_at: String!
+}

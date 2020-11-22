@@ -1,0 +1,11 @@
+type UserProfessionalDetails {
+    id: ID!
+    user: User!
+    designation: String
+    organization: String
+    industry: String
+    education: String
+    description: String
+    created_at: String!
+    updated_at: String!
+}

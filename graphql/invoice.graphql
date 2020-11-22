@@ -1,0 +1,9 @@
+type Invoice {
+    id: ID!
+    payment: Payment!
+    company: String
+    gst_number: String
+    address: String
+    created_at: String!
+    updated_at: String!
+}

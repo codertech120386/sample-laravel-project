@@ -1,0 +1,25 @@
+type Workspace {
+    id: ID!
+    name: String!
+    description: String!
+    addresses: [WorkspaceAddress!]! @hasMany
+    location_id: String!
+    profile_image: String!
+    amenities: [Amenity!]! @belongsToMany
+    banners: [WorkspaceBanner!]! @hasMany
+    images: [WorkspaceImage!]! @hasMany
+    plans: [WorkspacePlan!]! @hasMany
+    availedFreePlanIds: [Int!]!
+    isSubscribed: Boolean
+    weekly_schedules: [WeeklySchedule!]! @hasMany
+    type: WorkspaceType! @belongsTo
+    per_day: String
+    opens_at: String
+    closes_at: String
+    image_urls: [String!]!
+    seats: Int!
+    address: String
+    short_address: String
+    created_at: String!
+    updated_at: String!
+}

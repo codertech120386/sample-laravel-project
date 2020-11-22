@@ -1,0 +1,27 @@
+id: 10754
+name: coffic-backend-staging
+environments:
+  production:
+    memory: 1024
+    cli-memory: 512
+    runtime: php-7.4
+    database: coffic-users-prod
+    network: vapor-network-1591780113
+    build:
+      - "COMPOSER_MIRROR_PATH_REPOS=1 composer install --no-dev"
+      - "php artisan event:cache"
+    deploy:
+      - "php artisan migrate --force"
+      - "php artisan lighthouse:clear-cache"
+  staging:
+    memory: 1024
+    cli-memory: 512
+    runtime: php-7.4
+    database: coffic-users-staging
+    network: vapor-network-1591780113
+    build:
+      - "COMPOSER_MIRROR_PATH_REPOS=1 composer install"
+      - "php artisan event:cache"
+    deploy:
+      - "php artisan migrate --force"
+      - "php artisan lighthouse:clear-cache"

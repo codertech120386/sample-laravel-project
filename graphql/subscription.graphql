@@ -1,0 +1,7 @@
+type WorkspaceSubscription {
+    id: Int!
+    start_date: String!
+    end_date: String!
+    payment: Payment!
+    status: String!
+}

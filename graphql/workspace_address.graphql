@@ -1,0 +1,8 @@
+type WorkspaceAddress {
+    id: Int
+    address: String
+    short_address: String
+    lat: Int
+    long: Int
+    location_id: String
+}

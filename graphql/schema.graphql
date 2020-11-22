@@ -1,0 +1,277 @@
+#import workspace_banners.graphql
+#import workspace_images.graphql
+#import workspace_plans.graphql
+#import amenities.graphql
+#import workspace.graphql
+#import weekly_schedules.graphql
+#import date_schedules.graphql
+#import opens_closes.graphql
+#import workspace_types.graphql
+#import workspaces_with_count.graphql
+#import workspace_address.graphql
+#import user.graphql
+#import message.graphql
+#import coupon_codes.graphql
+#import payment_create_order.graphql
+#import payment_update_order.graphql
+#import subscription.graphql
+#import payment.graphql
+#import user_professional_details.graphql
+#import recently_searched_workspaces.graphql
+#import checkins.graphql
+#import invoice.graphql
+#import faq.graphql
+#import faq_data.graphql
+
+type Query {
+    me: User @middleware(checks: ["auth:sanctum"]) @auth
+    workspaces(type: String, active: Boolean @eq): [Workspace!]!
+        @field(resolver: "App\\GraphQL\\Queries\\WorkspaceModel@get_workspaces")
+    v1Workspace(id: ID!): Workspace!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Queries\\V1WorkspaceModel@get_workspace_details"
+        )
+    workspace(id: ID! @eq): Workspace! @find
+    userWorkspaces: [Workspace!]!
+        @field(
+            resolver: "App\\GraphQL\\Queries\\WorkspaceModel@get_user_workspaces"
+        )
+    banners: [WorkspaceBanner!]! @all
+    banner(id: ID! @eq): WorkspaceBanner @find
+    amenities: [Amenity!]! @all
+    amenity(id: ID! @eq): Amenity @find
+    images: [WorkspaceImage!]! @all
+    image(id: ID! @eq): WorkspaceImage @find
+    plans: [WorkspacePlan!]! @all
+    plan(id: ID! @eq): WorkspacePlan @find
+    getSchedule(workspace_id: ID!, date: String!): OpensCloses
+        @field(
+            resolver: "App\\GraphQL\\Queries\\WorkspaceModel@get_date_schedules"
+        )
+    types: [WorkspaceType!]! @all
+
+    type(
+        id: Int!
+        search: String
+        offset: Int
+        take: Int
+        filters: FilterUserInput
+    ): WorkspacesWithCount
+        @field(
+            resolver: "App\\GraphQL\\Queries\\WorkspaceModel@get_paginated_workspaces_with_search"
+        )
+
+    couponCodes: [CouponCode!]!
+        @field(
+            resolver: "App\\GraphQL\\Queries\\CouponCodeModel@get_active_coupon_codes"
+        )
+
+    checkCouponCode(code: String!): CouponCode
+        @field(
+            resolver: "App\\GraphQL\\Queries\\CouponCodeModel@get_coupon_code_if_valid"
+        )
+
+    subscription(id: Int! @eq): WorkspaceSubscription
+        @field(
+            resolver: "App\\GraphQL\\Queries\\SubscriptionModel@get_subscription"
+        )
+
+    userSubscriptions(status: String!): [WorkspaceSubscription!]!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Queries\\SubscriptionModel@get_user_subscriptions"
+        )
+
+    userProfessionalDetails: UserProfessionalDetails!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Queries\\UserDetailsModel@get_user_professional_details"
+        )
+
+    userPersonalDetails: User @middleware(checks: ["auth:sanctum"]) @auth
+
+    recentlySearchedWorkspaces: [RecentlySearchedWorkspaces!]!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Queries\\WorkspaceModel@get_recently_searched_workspaces"
+        )
+
+    userCheckinHistory(
+        startDate: String!
+        endDate: String!
+        limit: Int!
+        reverse: Boolean
+    ): [Checkin!]!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Queries\\CheckinModel@get_user_checkin_history"
+        )
+
+    userCheckedinDates(startDate: String!, limit: Int!): [Checkin!]!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Queries\\CheckinModel@get_user_checkin_dates"
+        )
+
+    checkin(id: ID! @eq): Checkin! @find
+
+    userPayments: [Payment!]!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Queries\\SubscriptionModel@get_user_payments"
+        )
+
+    invoice(payment_id: Int! @eq): Invoice!
+        @middleware(checks: ["auth:sanctum"])
+        @find
+
+    userFaqs: FaqData!
+        @field(resolver: "App\\GraphQL\\Queries\\FaqModel@get_user_faqs")
+    spaceFaqs: FaqData!
+        @field(resolver: "App\\GraphQL\\Queries\\FaqModel@get_space_faqs")
+}
+
+type Mutation {
+    signup(
+        name: String!
+        email: String!
+            @rules(
+                apply: ["email"]
+                messages: { email: "please enter a valid email" }
+            )
+        password: String! @bcrypt
+        phone: String!
+            @rules(
+                apply: ["min: 12", "max: 12"]
+                messages: {
+                    min: "please enter a 10 digit phone number"
+                    max: "please enter a 10 digit phone number"
+                }
+            )
+    ): User! @field(resolver: "App\\GraphQL\\Mutations\\AuthModel@signup")
+
+    login(
+        email: String!
+            @rules(
+                apply: ["email"]
+                messages: { email: "please enter a valid email" }
+            )
+        password: String!
+            @rules(
+                apply: ["min:6"]
+                messages: {
+                    password: "password must be minimum 6 characters long"
+                }
+            )
+    ): User! @field(resolver: "App\\GraphQL\\Mutations\\AuthModel@login")
+
+    forgotPassword(
+        email: String!
+            @rules(
+                apply: ["email"]
+                messages: { email: "please enter a valid email" }
+            )
+    ): Message!
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthModel@forgot_password")
+
+    changePassword(
+        password: String!
+            @rules(
+                apply: ["min:6"]
+                messages: {
+                    password: "password must be minimum 6 characters long"
+                }
+            )
+        code: String!
+            @rules(
+                apply: ["required"]
+                messages: { password: "code is mandatory" }
+            )
+    ): User!
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthModel@change_password")
+
+    verifyEmail(code: String! @rules(apply: ["required"])): User!
+        @field(resolver: "App\\GraphQL\\Mutations\\AuthModel@verify_email")
+
+    createOrder(
+        planId: Int!
+        numberOfSeats: Int!
+        gateway: String!
+        couponCode: String
+        startDate: String
+        endDate: String
+    ): PaymentCreateOrder!
+        @middleware(checks: ["auth:sanctum"])
+        @field(resolver: "App\\GraphQL\\Mutations\\PaymentModel@generate_order")
+
+    createOrderV1(
+        planId: Int!
+        numberOfSeats: Int!
+        gateway: String!
+        couponCode: String
+        startDate: String
+        endDate: String
+    ): PaymentCreateOrder!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Mutations\\PaymentModel@generate_order_v1"
+        )
+
+    updateOrder(
+        planId: Int!
+        numberOfSeats: Int!
+        gateway: String!
+        orderId: String!
+        paymentId: String!
+        signature: String!
+        startDate: String!
+        couponCode: String
+    ): PaymentUpdateOrder!
+        @middleware(checks: ["auth:sanctum"])
+        @field(resolver: "App\\GraphQL\\Mutations\\PaymentModel@update_order")
+
+    updateUserProfessionalDetails(
+        designation: String
+        organization: String
+        industry: String
+        education: String
+        description: String
+    ): UserProfessionalDetails!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Mutations\\UserDetailsModel@update_professional_details"
+        )
+
+    updateUserPersonalDetails(
+        name: String @rules(apply: ["required", "max: 50"])
+        gender: String
+        phone: String!
+            @rules(
+                apply: ["min: 12", "max: 12"]
+                messages: {
+                    min: "please enter a 10 digit phone number"
+                    max: "please enter a 10 digit phone number"
+                }
+            )
+    ): User!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Mutations\\UserDetailsModel@update_personal_details"
+        )
+
+    requestInvoicePDF(
+        paymentId: Int!
+        company: String
+        gstNumber: String
+        address: String
+    ): Invoice!
+        @middleware(checks: ["auth:sanctum"])
+        @field(
+            resolver: "App\\GraphQL\\Queries\\SubscriptionModel@request_invoice_pdf"
+        )
+
+    checkin(workspaceId: Int!): Checkin!
+        @middleware(checks: ["auth:sanctum"])
+        @field(resolver: "App\\GraphQL\\Mutations\\CheckinModel@checkin")
+}
